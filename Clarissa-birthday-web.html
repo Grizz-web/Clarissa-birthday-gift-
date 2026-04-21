@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For You</title>
+    <style>
+        body {
+            background-color: #050505;
+            color: #ffffff;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            overflow: hidden;
+        }
+
+        /* Container Bintang */
+        #stars-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: radial-gradient(ellipse at bottom, #0d0d0d 0%, #050505 100%);
+        }
+
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            opacity: 0.5;
+            animation: twinkle var(--duration) infinite ease-in-out;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.2); }
+        }
+
+        /* Container Utama */
+        .container {
+            width: 90%;
+            max-width: 350px;
+            text-align: center;
+            opacity: 0;
+            animation: fadeIn 2s forwards;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px; /* Jarak antar elemen agar tidak menempel */
+        }
+
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+
+        .name-title {
+            font-size: 1.2rem;
+            font-weight: 300;
+            letter-spacing: 5px;
+            color: #aaa;
+        }
+
+        .main-name {
+            font-size: 2.2rem;
+            font-weight: 700;
+            background: linear-gradient(to right, #ffffff, #888888);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: 12px;
+            margin-right: -12px;
+            filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.3));
+            animation: textAppear 1.5s ease-out;
+        }
+
+        @keyframes textAppear {
+            from { letter-spacing: 25px; opacity: 0; filter: blur(10px); }
+            to { letter-spacing: 12px; opacity: 1; filter: blur(0); }
+        }
+
+        .photo-container {
+            width: 200px;
+            height: 200px;
+            position: relative;
+            overflow: hidden;
+            border-radius: 50%;
+            box-shadow: 0 5px 15px rgba(192, 192, 192, 0.5);
+            animation: floating 4s ease-in-out infinite;
+        }
+
+        @keyframes floating {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .photo-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: grayscale(20%);
+        }
+
+        /* Kotak Pesan DYNAMIC */
+        .msg-container {
+            border: 1px outset #444;
+            border-radius: 15px;
+            padding: 15px 25px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+            display: inline-block;
+            width: auto;
+            max-width: 90%;
+            transition: all 0.5s ease; /* Transisi saat kotak melar */
+        }
+
+        .message-area {
+            font-size: 1rem;
+            font-weight: bold;
+            line-height: 1.8;
+            color: #ccc;
+            white-space: pre-line;
+            margin: 0;
+        }
+
+        .btn-open {
+            background: rgba(255, 255, 255, 0.02);
+            color: #fff;
+            backdrop-filter: blur(5px);
+            border-radius: 10px;
+            border: 3px solid #444;
+            padding: 12px 35px;
+            font-size: 0.8rem;
+            letter-spacing: 2px;
+            cursor: pointer;
+            font-weight: 300;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+        }
+
+        .btn-open:hover {
+            border-color: #e3e3e3;
+            letter-spacing: 4px;
+          font-weight: bold;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .footer-note {
+            font-size: 0.7rem;
+            color: #333;
+            letter-spacing: 1px;
+            transition: opacity 0.5s;
+        }
+    </style>
+</head>
+<body>
+    <div id="stars-container"></div>
+    
+    <audio id="myAudio">
+        <source src="lagu.opus" type="audio/mpeg">
+    </audio>
+
+    <div class="container">
+        <div class="name-title">TO:</div>
+        <div class="main-name">CLARISSA</div>
+
+        <div class="photo-container">
+            <img src="clarissa.png" alt="Clarissa">
+        </div>
+        
+        
+        <div class="msg-container">
+            <div class="message-area" id="msg">Press the button below.</div>
+        </div>
+
+        <button class="btn-open" id="btn" onclick="reveal()">Discover</button>
+
+        <div class="footer-note" id="note">22 . 09 . 2026</div>
+    </div>
+
+    <script>
+        const message = `Happy birthday, risol.
+Semoga semuanya berjalan lebih baik buat kamu ke depan,
+dan kamu selalu diberi kesehatan.
+    
+Happy birthday, my fineshyt`;
+
+        let index = 0;
+
+        function reveal() {
+            document.getElementById('myAudio').play().catch(() => console.log("Audio play blocked"));
+            document.getElementById('btn').style.display = 'none'; // Pakai display none biar layout bergeser naik
+            document.getElementById('note').style.opacity = '0';
+            document.getElementById('msg').innerHTML = "";
+            setTimeout(type, 500);
+        }
+    
+    //ily CLARISAAAAA
+
+        function type() {
+            if (index < message.length) {
+                document.getElementById('msg').innerHTML += message.charAt(index);
+                index++;
+                setTimeout(type, 175);
+            }
+        }  
+
+        function createStars() {
+            const container = document.getElementById('stars-container');
+            for (let i = 0; i < 150; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                const size = Math.random() * 2 + 1 + 'px';
+                star.style.width = size;
+                star.style.height = size;
+                star.style.top = Math.random() * 100 + '%';
+                star.style.left = Math.random() * 100 + '%';
+                star.style.setProperty('--duration', Math.random() * 3 + 2 + 's');
+                container.appendChild(star);
+            }
+        }
+
+        createStars();
+    </script>
+</body>
+</html>
